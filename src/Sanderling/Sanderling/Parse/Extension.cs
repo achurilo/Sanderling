@@ -1,4 +1,5 @@
 ﻿using Bib3;
+using Bib3.Geometrik;
 using BotEngine.Common;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,19 @@ namespace Sanderling.Parse
 		static public IMemoryMeasurement Parse(this MemoryStruct.IMemoryMeasurement memoryMeasurement) =>
 			null == memoryMeasurement ? null : new Parse.MemoryMeasurement(memoryMeasurement);
 
-		static public IModuleButtonTooltip ParseAsModuleButtonTooltip(this MemoryStruct.IContainer container) =>
-			null == container ? null : new ModuleButtonTooltip(container);
+		static public IModuleButtonTooltip ParseAsModuleButtonTooltip(this MemoryStruct.IContainer container)
+		{
+			RectInt? region = container?.Region;
+			bool isValidContainer = region != null && region != RectInt.Empty;
+			if (isValidContainer)
+			{
+				return new ModuleButtonTooltip(container);
+			}
+			else
+			{
+				return null;
+			}
+		}
 
 		static public INeocom Parse(this MemoryStruct.INeocom neocom) =>
 			null == neocom ? null : new Neocom(neocom);
